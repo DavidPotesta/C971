@@ -5,12 +5,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="C971.TermPage"
-             Title="ok">
+             Title="Term">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="{Binding Title}"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <Label Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label x:Name="termStart" HorizontalOptions="Center"/>
+                <Label x:Name="termEnd" HorizontalOptions="Center"/>
+                <ListView x:Name="coursesListView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell IsEnabled="True">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                    <Label Text="{Binding Id}" VerticalOptions="Center" TextColor="Black"/>
+                                    <Label Text="{Binding CourseName}" VerticalOptions="Center" TextColor="Black"/>
+                                </StackLayout>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
