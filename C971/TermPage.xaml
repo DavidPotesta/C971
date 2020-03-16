@@ -29,6 +29,9 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <Button Text="Add Course" 
+                x:Name="btnNewCourse"
+                Clicked="btnAddCourse_Clicked"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

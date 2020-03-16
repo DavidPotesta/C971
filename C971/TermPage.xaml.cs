@@ -14,16 +14,18 @@ namespace C971
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TermPage : ContentPage
     {
-        private Term _term;
+        public Term _term;
+        public MainPage _main;
 
         public TermPage()
         {
             InitializeComponent();
         }
 
-        public TermPage(Term term)
+        public TermPage(Term term,MainPage main)
         {
             _term = term;
+            _main = main;
             InitializeComponent();
             Title = term.TermName;
 
@@ -39,6 +41,11 @@ namespace C971
                 var coursesForTerm = con.Query<Course>($"SELECT * FROM Courses WHERE Term = '{_term.Id}'");
                 coursesListView.ItemsSource = coursesForTerm;
             }
+        }
+
+        async private void btnAddCourse_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new AddCourse(_term,_main));
         }
     }
 }

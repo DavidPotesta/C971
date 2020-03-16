@@ -18,12 +18,14 @@ namespace C971
         public List<Term> terms = new List<Term>();
         public List<Course> courses = new List<Course>();
         public List<Assessment> assessments = new List<Assessment>();
+        public MainPage main;
         //Flag to only run CreateEvaluationData() once.
         bool firstTime = true;
         public MainPage()
         {
             InitializeComponent();
             termsListView.ItemTapped += new EventHandler<ItemTappedEventArgs>(ItemTapped);
+            main = this;
         }
 
 
@@ -140,7 +142,7 @@ namespace C971
         async void ItemTapped(object sender, ItemTappedEventArgs e)
         {
             Term term = (Term)e.Item;
-            await Navigation.PushAsync(new TermPage(term));
+            await Navigation.PushAsync(new TermPage(term,main));
         }
     }
 }
