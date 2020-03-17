@@ -7,7 +7,7 @@
              x:Class="C971.AssessmentPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Assessment"
+            <Label Text="Welcome to Assessments"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
         </StackLayout>
