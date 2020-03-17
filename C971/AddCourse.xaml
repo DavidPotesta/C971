@@ -12,8 +12,14 @@
                 HorizontalOptions="CenterAndExpand" />
             <Entry Placeholder="Course Name" 
                x:Name="txtCourseTitle"/>
-            <Entry Placeholder="Course Status" 
-               x:Name="txtCourseStatus"/>
+            <Picker Title="Course Status" x:Name="pickerCourseStatus">
+                <Picker.Items>
+                    <x:String>In Progress</x:String>
+                    <x:String>Completed</x:String>
+                    <x:String>Dropped</x:String>
+                    <x:String>Plan To Take</x:String>
+                </Picker.Items>
+            </Picker>
             <Label Text="Start Date" />
             <DatePicker x:Name="dpStartDate" Format="D"></DatePicker>
             <Label Text="End Date" />
@@ -32,8 +38,6 @@
                     <x:String>Yes</x:String>
                 </Picker.Items>
             </Picker>
-            <Entry Placeholder="Get Notifications? Yes or No" 
-               x:Name="txtGetNotified"/>
             <Button Text="Save" 
                 x:Name="btnSave"
                 Clicked="btnSave_Clicked"/>

@@ -94,7 +94,7 @@ namespace C971
                 Course newCourse = new Course();
             newCourse.Term = newTerm.Id;
             newCourse.CourseName = "Intro To Theoretical Physics";
-            newCourse.CourseStatus = "Active";
+            newCourse.CourseStatus = "Plan To Take";
             newCourse.Start = new DateTime(2020,03,12);
             newCourse.End = new DateTime(2020, 04, 25);
             newCourse.InstructorName = "David Potesta";

@@ -33,7 +33,7 @@ namespace C971
 
                 Course newCourse = new Course();
                 newCourse.CourseName = txtCourseTitle.Text;
-                newCourse.CourseStatus = txtCourseStatus.Text;
+                newCourse.CourseStatus = pickerCourseStatus.SelectedItem.ToString();
                 newCourse.Start = dpStartDate.Date;
                 newCourse.End = dpEndDate.Date;
                 newCourse.InstructorName = txtCourseInstructorName.Text;

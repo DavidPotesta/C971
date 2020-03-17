@@ -7,9 +7,92 @@
              x:Class="C971.CoursePage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to the Detailed Course Page!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <Label Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <TableView>
+                    <TableSection  x:Name="tblSingleCourse">
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Course Name:" />
+                                <Entry x:Name="txtCourseTitle"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Course Status:" />
+                                <Picker Title="Course Status" x:Name="pickerCourseStatus">
+                                    <Picker.Items>
+                                        <x:String>In Progress</x:String>
+                                        <x:String>Completed</x:String>
+                                        <x:String>Dropped</x:String>
+                                        <x:String>Plan To Take</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Start Date:" />
+                                <DatePicker x:Name="dpStartDate" Format="D"></DatePicker>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="End Date:" />
+                                <DatePicker x:Name="dpEndDate" Format="D"></DatePicker>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Instructor Name:" />
+                                <Entry x:Name="txtInstructorName"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Instructor Phone:" />
+                                <Entry x:Name="txtInstructorPhone"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Instructor Email:" />
+                                <Entry x:Name="txtInstructorEmail"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Notes:" />
+                                <Entry x:Name="txtNotes"/>
+                            </StackLayout>
+                        </ViewCell>
+                        <ViewCell IsEnabled="True">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label Text="Get Notifications:" />
+                                <Picker Title="Get Notifications" x:Name="pickerNotifications">
+                                    <Picker.Items>
+                                        <x:String>No</x:String>
+                                        <x:String>Yes</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                </TableView>
+                <Button Text="Discard Changes" 
+                x:Name="btnDiscardChanges"
+                Clicked="btnDiscardChanges_Clicked"/>
+                <Button Text="Save Changes" 
+                x:Name="btnEditCourse"
+                Clicked="btnEditCourse_Clicked"/>
+                <Button Text="Assessments" 
+                x:Name="btnViewAssessments"
+                Clicked="btnViewAssessments_Clicked"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -46,7 +46,8 @@ namespace C971
 
         async private void btnAddCourse_Clicked(object sender, EventArgs e)
         {
-            if (getCourseCount() < 1)
+            // Only allow 6 courses per term
+            if (getCourseCount() < 6)
             {
                 await Navigation.PushModalAsync(new AddCourse(_term,_main));
             }
@@ -71,7 +72,7 @@ namespace C971
         async void ItemTapped(object sender, ItemTappedEventArgs e)
         {
             Course course = (Course)e.Item;
-            await Navigation.PushAsync(new CoursePage(_term,_main));
+            await Navigation.PushAsync(new CoursePage(_term,_main,course));
         }
     }
 }

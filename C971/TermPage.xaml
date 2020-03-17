@@ -21,7 +21,6 @@
                         <DataTemplate>
                             <ViewCell IsEnabled="True">
                                 <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                                    <Label Text="{Binding Id}" VerticalOptions="Center" TextColor="Black"/>
                                     <Label Text="{Binding CourseName}" VerticalOptions="Center" TextColor="Black"/>
                                 </StackLayout>
                             </ViewCell>
