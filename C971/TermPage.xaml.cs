@@ -27,6 +27,7 @@ namespace C971
             _term = term;
             _main = main;
             InitializeComponent();
+            coursesListView.ItemTapped += new EventHandler<ItemTappedEventArgs>(ItemTapped);
             Title = term.TermName;
 
 
@@ -45,7 +46,32 @@ namespace C971
 
         async private void btnAddCourse_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new AddCourse(_term,_main));
+            if (getCourseCount() < 1)
+            {
+                await Navigation.PushModalAsync(new AddCourse(_term,_main));
+            }
+            else
+            {
+                // modal windows saying "can't add more than 6 courses"
+                await Navigation.PushModalAsync(new CourseMaximumError());
+            }
+        }
+
+        int getCourseCount()
+        {
+            int count = 0;
+            using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+            {
+                var courseCount = con.Query<Course>($"SELECT COUNT(*) FROM Courses WHERE Term = '{_term.Id}'");
+                count = courseCount.Count;
+            }
+
+            return count;
+        }
+        async void ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            Course course = (Course)e.Item;
+            await Navigation.PushAsync(new CoursePage(_term,_main));
         }
     }
 }
