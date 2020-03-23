@@ -1,0 +1,63 @@
+﻿using C971.Classes;
+using SQLite;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace C971
+{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class AddAssessment : ContentPage
+    {
+        public Course _course;
+        public MainPage _main;
+        public AddAssessment(Course course, MainPage main)
+        {
+            _course = course;
+            _main = main;
+            InitializeComponent();
+        }
+
+        private void btnDiscardChanges_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopAsync();
+        }
+
+        async private void btnAddAssessment_Clicked(object sender, EventArgs e)
+        {
+            Assessment newAssessment = new Assessment();
+            newAssessment.AssessmentName = txtAssessmentName.Text;
+            newAssessment.AssessType = pickerAssessmentType.SelectedItem.ToString();
+            newAssessment.End = dpDueDate.Date;
+            newAssessment.GetNotified = pickerNotifications.SelectedIndex;
+            newAssessment.Course = _course.Id;
+
+            using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+            {
+                var objectiveCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Objective'");
+                var performanceCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Performance'");
+                if (newAssessment.AssessType.ToString() == "Objective" && objectiveCount.Count == 0)
+                {
+                    con.Insert(newAssessment);
+                    _main.assessments.Add(newAssessment);
+                    await Navigation.PopModalAsync();
+                }
+                else if (newAssessment.AssessType.ToString() == "Performance" && performanceCount.Count == 0)
+                {
+                    con.Insert(newAssessment);
+                    _main.assessments.Add(newAssessment);
+                    await Navigation.PopModalAsync();
+                }
+                else 
+                {
+                    await Navigation.PushModalAsync(new CourseMaximumError());
+                }
+            }
+        }
+    }
+}

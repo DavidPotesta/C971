@@ -7,9 +7,30 @@
              x:Class="C971.AssessmentPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Assessments"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <Label Text="{Binding Title}"
+                    VerticalOptions="CenterAndExpand" 
+                    HorizontalOptions="CenterAndExpand" />
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Label x:Name="termStart" HorizontalOptions="Center"/>
+                <Label x:Name="termEnd" HorizontalOptions="Center"/>
+                <ListView x:Name="AssessmentsListView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell IsEnabled="True">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                    <Label Text="{Binding AssessmentName}" VerticalOptions="Center" TextColor="Black"/>
+                                </StackLayout>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button Text="Add Assessment" 
+                x:Name="btnNewAssessment"
+                Clicked="btnNewAssessment_Clicked"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -2,10 +2,8 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,6 +23,7 @@ namespace C971
             _term = term;
             _main = main;
             InitializeComponent();
+
         }
         protected override void OnAppearing()
         {
@@ -82,7 +81,21 @@ namespace C971
 
         private void btnViewAssessments_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new AssessmentPage());
+            Navigation.PushAsync(new AssessmentPage(_course,_main));
+        }
+
+        public async Task ShareNotes()
+        {
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Text = txtNotes.Text,
+                Title = "Share Notes"
+            });
+        }
+
+        private async void btnShareNotes_Clicked(object sender, EventArgs e)
+        {
+            await ShareNotes();
         }
     }
 }

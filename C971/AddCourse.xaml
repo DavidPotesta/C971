@@ -6,7 +6,8 @@
              mc:Ignorable="d"
              x:Class="C971.AddCourse">
     <ContentPage.Content>
-        <StackLayout Margin="20,20,20,0">
+        <ScrollView>
+            <StackLayout Margin="20,20,20,0">
             <Label Text="Add A Course"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
@@ -41,6 +42,10 @@
             <Button Text="Save" 
                 x:Name="btnSave"
                 Clicked="btnSave_Clicked"/>
-        </StackLayout>
+                <Button Text="Exit" 
+                x:Name="btnExit"
+                Clicked="btnExit_Clicked"/>
+            </StackLayout>
+            </ScrollView>
     </ContentPage.Content>
 </ContentPage>

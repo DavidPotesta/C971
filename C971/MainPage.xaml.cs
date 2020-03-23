@@ -1,4 +1,5 @@
 ﻿using C971.Classes;
+using Plugin.LocalNotifications;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,7 @@ namespace C971
                     
                 }
                 firstTime = false;
+                runAlerts();
             }
             else if(firstTime)
             {
@@ -68,14 +70,39 @@ namespace C971
                     CreateEvaluationData(i);
                 }
                 firstTime = false;
+                runAlerts();
             }
             using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
             {
                 terms = con.Table<Term>().ToList();
                 termsListView.ItemsSource = terms;
             }
-
+            
             base.OnAppearing();
+        }
+
+        private void runAlerts()
+        {
+            foreach (Term t in terms)
+            {
+                using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+                {
+                    var courses = con.Query<Course>($"SELECT * FROM Courses WHERE Term = '{t.Id}'");
+                    foreach (Course c in courses)
+                    {
+                        // Check for courses starting within 3 days
+                        if ((c.Start - DateTime.Now).TotalDays < 3 && c.GetNotified == 1)
+                        {
+                            CrossLocalNotifications.Current.Show("Course Starting Soon", $"{c.CourseName} is starting on {c.Start.Date.ToString()}");
+                        }
+                        // Check for courses ending within 7 days
+                        if ((c.End - DateTime.Now).TotalDays < 7 && c.GetNotified == 1)
+                        {
+                            CrossLocalNotifications.Current.Show("Course Ending Soon", $"{c.CourseName} is ending on {c.End.Date.ToString()}");
+                        }
+                    }
+                }
+            }
         }
 
         private void CreateEvaluationData(int termNumber)
@@ -95,29 +122,29 @@ namespace C971
             newCourse.Term = newTerm.Id;
             newCourse.CourseName = "Intro To Theoretical Physics";
             newCourse.CourseStatus = "Plan To Take";
-            newCourse.Start = new DateTime(2020,03,12);
-            newCourse.End = new DateTime(2020, 04, 25);
+            newCourse.Start = new DateTime(2020,03,23);
+            newCourse.End = new DateTime(2020, 05, 25);
             newCourse.InstructorName = "David Potesta";
             newCourse.InstructorEmail = "dpotest@wgu.edu";
             newCourse.InstructorPhone = "414-768-3782";
             newCourse.Notes = "You must complete the Objective Assessment before the Performance assessment";
-            newCourse.GetNotified = 0;
+            newCourse.GetNotified = 1;
             using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
             {
                 con.Insert(newCourse);
             }
                 ////       ----SAMPLE OBJECTIVE ASSESSMENT----
-                Assessment newObjectiveAssessment = new Assessment();
-            newObjectiveAssessment.AssessmentName = "BOP1";
-            newObjectiveAssessment.Start = new DateTime(2020, 04, 11);
-            newObjectiveAssessment.End = new DateTime(2020, 04, 11);
-            newObjectiveAssessment.AssessType = "Objective";
-            newObjectiveAssessment.Course = newCourse.Id;
-            newObjectiveAssessment.GetNotified = 0;
-            using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
-            {
-                con.Insert(newObjectiveAssessment);
-            }
+            //    Assessment newObjectiveAssessment = new Assessment();
+            //newObjectiveAssessment.AssessmentName = "BOP1";
+            //newObjectiveAssessment.Start = new DateTime(2020, 04, 11);
+            //newObjectiveAssessment.End = new DateTime(2020, 04, 11);
+            //newObjectiveAssessment.AssessType = "Objective";
+            //newObjectiveAssessment.Course = newCourse.Id;
+            //newObjectiveAssessment.GetNotified = 0;
+            //using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+            //{
+            //    con.Insert(newObjectiveAssessment);
+            //}
                 ////       ----SAMPLE PERFORMANCE ASSESSMENT----
                 Assessment newPerformanceAssessment = new Assessment();
             newPerformanceAssessment.AssessmentName = "LAG1";

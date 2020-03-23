@@ -63,7 +63,7 @@ namespace C971
             int count = 0;
             using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
             {
-                var courseCount = con.Query<Course>($"SELECT COUNT(*) FROM Courses WHERE Term = '{_term.Id}'");
+                var courseCount = con.Query<Course>($"SELECT * FROM Courses WHERE Term = '{_term.Id}'");
                 count = courseCount.Count;
             }
 

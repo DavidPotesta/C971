@@ -40,5 +40,10 @@ namespace C971
             }
 
         }
+
+        private void btnExit_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopModalAsync();
+        }
     }
 }

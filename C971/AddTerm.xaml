@@ -16,6 +16,9 @@
             <Button Text="Save" 
                 x:Name="btnSave"
                 Clicked="btnSave_Clicked"/>
+            <Button Text="Exit" 
+                x:Name="btnExit"
+                Clicked="btnExit_Clicked"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

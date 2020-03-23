@@ -5,6 +5,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using UserNotifications;
 
 namespace C971.iOS
 {
@@ -28,6 +29,22 @@ namespace C971.iOS
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             string completePath = Path.Combine(folderPath, fileName);
             LoadApplication(new App(completePath));
+            if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
+            {
+                // Ask the user for permission to get notifications on iOS 10.0+
+                UNUserNotificationCenter.Current.RequestAuthorization(
+                        UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,
+                        (approved, error) => { });
+            }
+            else if (UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+            {
+                // Ask the user for permission to get notifications on iOS 8.0+
+                var settings = UIUserNotificationSettings.GetSettingsForTypes(
+                        UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound,
+                        new NSSet());
+
+                UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+            }
 
             return base.FinishedLaunching(app, options);
         }
