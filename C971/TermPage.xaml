@@ -31,6 +31,12 @@
                 <Button Text="Add Course" 
                 x:Name="btnNewCourse"
                 Clicked="btnAddCourse_Clicked"/>
+                <Button Text="Edit This Term" 
+                x:Name="btnEditTerm"
+                Clicked="btnEditTerm_Clicked"/>
+                <Button Text="Delete This Term" 
+                x:Name="btnDeleteTerm"
+                Clicked="btnDeleteTerm_Clicked"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

@@ -10,16 +10,16 @@ using Xamarin.Forms.Xaml;
 namespace C971
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CourseMaximumError : ContentPage
+    public partial class InputError : ContentPage
     {
-        public CourseMaximumError()
+        public InputError()
         {
             InitializeComponent();
         }
 
-        private async void btnCloseTermAddError_Clicked(object sender, EventArgs e)
+        private void btnOK_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PopAsync();
+            Navigation.PopModalAsync();
         }
     }
 }

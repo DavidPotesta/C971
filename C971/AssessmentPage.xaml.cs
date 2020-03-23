@@ -50,10 +50,11 @@ namespace C971
             {
                 await Navigation.PushModalAsync(new AddAssessment(_course,_main));
             }
+
             else
             {
                 // modal windows saying "can't add more than 2 assessments"
-                await Navigation.PushModalAsync(new CourseMaximumError());
+                await Navigation.PushModalAsync(new AssessmentError());
             }
         }
 

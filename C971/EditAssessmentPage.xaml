@@ -73,6 +73,10 @@
                 <Button Text="Save Changes" 
                 x:Name="btnEditCourse"
                 Clicked="btnEditCourse_Clicked"/>
+                <Button Text="Delete" 
+                x:Name="btnDeleteAssess"
+                HeightRequest="40"
+                Clicked="btnDeleteAssess_Clicked"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

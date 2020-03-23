@@ -25,39 +25,62 @@ namespace C971
 
         private void btnDiscardChanges_Clicked(object sender, EventArgs e)
         {
-            Navigation.PopAsync();
+            Navigation.PopModalAsync();
         }
 
         async private void btnAddAssessment_Clicked(object sender, EventArgs e)
         {
-            Assessment newAssessment = new Assessment();
-            newAssessment.AssessmentName = txtAssessmentName.Text;
-            newAssessment.AssessType = pickerAssessmentType.SelectedItem.ToString();
-            newAssessment.End = dpDueDate.Date;
-            newAssessment.GetNotified = pickerNotifications.SelectedIndex;
-            newAssessment.Course = _course.Id;
-
-            using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+            if (ValidateUserInput())
             {
-                var objectiveCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Objective'");
-                var performanceCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Performance'");
-                if (newAssessment.AssessType.ToString() == "Objective" && objectiveCount.Count == 0)
+                Assessment newAssessment = new Assessment();
+                newAssessment.AssessmentName = txtAssessmentName.Text;
+                newAssessment.AssessType = pickerAssessmentType.SelectedItem.ToString();
+                newAssessment.End = dpDueDate.Date;
+                newAssessment.GetNotified = pickerNotifications.SelectedIndex;
+                newAssessment.Course = _course.Id;
+
+                using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
                 {
-                    con.Insert(newAssessment);
-                    _main.assessments.Add(newAssessment);
-                    await Navigation.PopModalAsync();
-                }
-                else if (newAssessment.AssessType.ToString() == "Performance" && performanceCount.Count == 0)
-                {
-                    con.Insert(newAssessment);
-                    _main.assessments.Add(newAssessment);
-                    await Navigation.PopModalAsync();
-                }
-                else 
-                {
-                    await Navigation.PushModalAsync(new CourseMaximumError());
+                    var objectiveCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Objective'");
+                    var performanceCount = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{_course.Id}' AND AssessType = 'Performance'");
+                    if (newAssessment.AssessType.ToString() == "Objective" && objectiveCount.Count == 0)
+                    {
+                        con.Insert(newAssessment);
+                        _main.assessments.Add(newAssessment);
+                        await Navigation.PopModalAsync();
+                    }
+                    else if (newAssessment.AssessType.ToString() == "Performance" && performanceCount.Count == 0)
+                    {
+                        con.Insert(newAssessment);
+                        _main.assessments.Add(newAssessment);
+                        await Navigation.PopModalAsync();
+                    }
+                    else
+                    {
+                        await Navigation.PushModalAsync(new AssessmentError());
+                    }
                 }
             }
+            else
+            {
+                await Navigation.PushModalAsync(new InputError());
+            }
+        }
+
+        private bool ValidateUserInput()
+        {
+            bool valid = true;
+
+            if (txtAssessmentName == null ||
+                pickerAssessmentType.SelectedItem == null ||
+                dpDueDate.Date == null ||
+                pickerNotifications.SelectedItem == null
+                )
+
+            {
+                return false;
+            }
+            return valid;
         }
     }
 }

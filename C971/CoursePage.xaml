@@ -135,7 +135,11 @@
                 x:Name="btnViewAssessments"
                 HeightRequest="40"
                 Clicked="btnViewAssessments_Clicked"/>
-            </StackLayout>
+                <Button Text="Delete" 
+                x:Name="btnDeleteCourse"
+                HeightRequest="40"
+                Clicked="btnDeleteCourse_Clicked"/>
+                </StackLayout>
         </StackLayout>
             </ScrollView>
     </ContentPage.Content>

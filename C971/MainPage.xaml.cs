@@ -43,7 +43,7 @@ namespace C971
                 terms = con.Table<Term>().ToList();
                 //termsListView.ItemsSource = terms;
             }
-            if(terms.Any() && firstTime)
+            if (terms.Any() && firstTime)
             {
                 using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
                 {
@@ -54,21 +54,17 @@ namespace C971
                     con.CreateTable<Term>();
                     con.CreateTable<Course>();
                     con.CreateTable<Assessment>();
-                    for (int i = 1; i < 7; i++)
-                    {
-                        CreateEvaluationData(i);
-                    }
-                    
+
+                    CreateEvaluationData(1);
                 }
                 firstTime = false;
                 runAlerts();
             }
-            else if(firstTime)
+            else if (firstTime)
             {
-                for (int i = 1; i < 7; i++)
-                {
-                    CreateEvaluationData(i);
-                }
+
+                CreateEvaluationData(1);
+
                 firstTime = false;
                 runAlerts();
             }
@@ -77,7 +73,7 @@ namespace C971
                 terms = con.Table<Term>().ToList();
                 termsListView.ItemsSource = terms;
             }
-            
+
             base.OnAppearing();
         }
 
@@ -100,9 +96,22 @@ namespace C971
                         {
                             CrossLocalNotifications.Current.Show("Course Ending Soon", $"{c.CourseName} is ending on {c.End.Date.ToString()}");
                         }
+
+                        //Check for assessments that are coming up within 3 days
+                        var assessments = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{c.Id}'");
+                        foreach (Assessment a in assessments)
+                        {
+                            if ((a.End - DateTime.Now).TotalDays < 3 && a.GetNotified == 1)
+                            {
+                                CrossLocalNotifications.Current.Show("Assessment Due Soon", $"{a.AssessmentName} is starting on {a.End.Date.ToString()}");
+                            }
+                        }
+
                     }
                 }
             }
+
+
         }
 
         private void CreateEvaluationData(int termNumber)
@@ -117,39 +126,39 @@ namespace C971
             {
                 con.Insert(newTerm);
             }
-                ////       ----SAMPLE COURSE----
-                Course newCourse = new Course();
+            ////       ----SAMPLE COURSE----
+            Course newCourse = new Course();
             newCourse.Term = newTerm.Id;
             newCourse.CourseName = "Intro To Theoretical Physics";
             newCourse.CourseStatus = "Plan To Take";
-            newCourse.Start = new DateTime(2020,03,23);
-            newCourse.End = new DateTime(2020, 05, 25);
+            newCourse.Start = new DateTime(2020, 03, 23);
+            newCourse.End = new DateTime(2020, 06, 11);
             newCourse.InstructorName = "David Potesta";
             newCourse.InstructorEmail = "dpotest@wgu.edu";
             newCourse.InstructorPhone = "414-768-3782";
-            newCourse.Notes = "You must complete the Objective Assessment before the Performance assessment";
+            newCourse.Notes = "Hurry Up";
             newCourse.GetNotified = 1;
             using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
             {
                 con.Insert(newCourse);
             }
-                ////       ----SAMPLE OBJECTIVE ASSESSMENT----
-            //    Assessment newObjectiveAssessment = new Assessment();
-            //newObjectiveAssessment.AssessmentName = "BOP1";
-            //newObjectiveAssessment.Start = new DateTime(2020, 04, 11);
-            //newObjectiveAssessment.End = new DateTime(2020, 04, 11);
-            //newObjectiveAssessment.AssessType = "Objective";
-            //newObjectiveAssessment.Course = newCourse.Id;
-            //newObjectiveAssessment.GetNotified = 0;
-            //using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
-            //{
-            //    con.Insert(newObjectiveAssessment);
-            //}
-                ////       ----SAMPLE PERFORMANCE ASSESSMENT----
-                Assessment newPerformanceAssessment = new Assessment();
+            ////       ----SAMPLE OBJECTIVE ASSESSMENT----
+            Assessment newObjectiveAssessment = new Assessment();
+            newObjectiveAssessment.AssessmentName = "BOP1";
+            newObjectiveAssessment.Start = new DateTime(2020, 04, 11);
+            newObjectiveAssessment.End = new DateTime(2020, 04, 11);
+            newObjectiveAssessment.AssessType = "Objective";
+            newObjectiveAssessment.Course = newCourse.Id;
+            newObjectiveAssessment.GetNotified = 0;
+            using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+            {
+                con.Insert(newObjectiveAssessment);
+            }
+            ////       ----SAMPLE PERFORMANCE ASSESSMENT----
+            Assessment newPerformanceAssessment = new Assessment();
             newPerformanceAssessment.AssessmentName = "LAG1";
-            newPerformanceAssessment.Start = new DateTime(2020, 04, 11);
-            newPerformanceAssessment.End = new DateTime(2020, 04, 11);
+            newPerformanceAssessment.Start = new DateTime(2020, 06, 11);
+            newPerformanceAssessment.End = new DateTime(2020, 06, 11);
             newPerformanceAssessment.AssessType = "Performance";
             newPerformanceAssessment.Course = newCourse.Id;
             newPerformanceAssessment.GetNotified = 0;
@@ -169,7 +178,7 @@ namespace C971
         async void ItemTapped(object sender, ItemTappedEventArgs e)
         {
             Term term = (Term)e.Item;
-            await Navigation.PushAsync(new TermPage(term,main));
+            await Navigation.PushAsync(new TermPage(term, main));
         }
     }
 }

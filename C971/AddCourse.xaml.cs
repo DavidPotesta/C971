@@ -3,6 +3,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,8 +29,10 @@ namespace C971
             InitializeComponent();
         }
 
-        private void btnSave_Clicked(object sender, EventArgs e)
+        private async void btnSave_Clicked(object sender, EventArgs e)
         {
+            if (ValidateUserInput())
+            {
 
                 Course newCourse = new Course();
                 newCourse.CourseName = txtCourseTitle.Text;
@@ -42,6 +45,9 @@ namespace C971
                 newCourse.Notes = txtNotes.Text;
                 newCourse.GetNotified = pickerNotifications.SelectedIndex;
                 newCourse.Term = termPage.Id;
+
+
+
                 using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
                 {
                     con.Insert(newCourse);
@@ -51,15 +57,60 @@ namespace C971
                     // called when modal is dismissed.  bug? 
                     //https://forums.xamarin.com/discussion/58606/onappearing-not-called-on-android-for-underneath-page-if-page-on-top-was-pushed-modal
                     mainPage.courses.Add(newCourse);
-                    Navigation.PopModalAsync();
+                    await Navigation.PopModalAsync();
                 }
-
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new InputError());
+            }
 
         }
 
         private void btnExit_Clicked(object sender, EventArgs e)
         {
             Navigation.PopModalAsync();
+        }
+
+        private bool ValidateUserInput()
+        {
+            bool valid = true;
+
+            if (txtCourseTitle == null ||
+                pickerCourseStatus.SelectedItem == null ||
+                dpStartDate.Date == null ||
+                dpEndDate.Date == null ||
+                dpEndDate.Date < dpStartDate.Date ||
+                txtCourseInstructorName == null ||
+                txtInstructorEmail.Text == null ||
+                txtInstructorPhone == null ||
+                pickerNotifications.SelectedItem == null
+                )
+            
+            {
+                return false;
+            }
+            
+            if (txtInstructorEmail.Text != null)
+            {
+                valid = ValidateEmail(txtInstructorEmail.Text);
+            }
+
+
+            return valid;
+        }
+        private bool ValidateEmail(string email)
+        {
+            try
+            {
+                MailAddress m = new MailAddress(email);
+
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }

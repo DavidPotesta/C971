@@ -12,35 +12,35 @@ using Xamarin.Forms.Xaml;
 namespace C971
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AddTerm : ContentPage
+    public partial class EditTermPage : ContentPage
     {
-        public MainPage mainPage;
-        public AddTerm(MainPage main)
+        public Term _term;
+        public MainPage _main;
+        public EditTermPage(Term term, MainPage main)
         {
-            mainPage = main;
+            _term = term;
+            _main = main;
             InitializeComponent();
         }
-
-        private async void btnSave_Clicked(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            if (ValidateUserInput())
+            txtTermTitle.Text = _term.TermName;
+            dpStartDate.Date = _term.Start.Date;
+            dpEndDate.Date = _term.End.Date;
+        }
+
+        private async void btnSaveChanges_Clicked(object sender, EventArgs e)
+        {
+            if(ValidateUserInput())
             {
 
-
-                Term newTerm = new Term();
-                newTerm.TermName = txtTermTitle.Text;
-                newTerm.Start = dpStartDate.Date;
-                newTerm.End = dpEndDate.Date;
+                _term.TermName = txtTermTitle.Text;
+                _term.Start = dpStartDate.Date;
+                _term.End = dpEndDate.Date;
                 using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
                 {
-                    con.Insert(newTerm);
-
-                    // Maybe don't have to update termListView if OnAppearing() gets called when this modal 
-                    // is dismissed.....yes we do lol, even though documentation says that OnAppearing() gets
-                    // called when modal is dismissed.  bug? 
-                    //https://forums.xamarin.com/discussion/58606/onappearing-not-called-on-android-for-underneath-page-if-page-on-top-was-pushed-modal
-                    mainPage.terms.Add(newTerm);
-                    await Navigation.PopModalAsync();
+                    con.Update(_term);
+                    await Navigation.PopToRootAsync();
                 }
             }
             else
@@ -67,7 +67,7 @@ namespace C971
 
         private void btnExit_Clicked(object sender, EventArgs e)
         {
-            Navigation.PopModalAsync();
+            Navigation.PopAsync();
         }
     }
 }

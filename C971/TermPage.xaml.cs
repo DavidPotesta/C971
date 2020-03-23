@@ -74,5 +74,38 @@ namespace C971
             Course course = (Course)e.Item;
             await Navigation.PushAsync(new CoursePage(_term,_main,course));
         }
+
+        private async void btnDeleteTerm_Clicked(object sender, EventArgs e)
+        {
+            // Before deleting term, you need to make sure to
+            // delete the courses (and their assessments) associated with this term
+
+
+            var result = await this.DisplayAlert("Alert!", "Do you really want to delete this term?", "Yes", "No");
+            if(result)
+            {
+                using (SQLiteConnection con = new SQLiteConnection(App.FilePath))
+                {
+                    var courses = con.Query<Course>($"SELECT * FROM Courses WHERE Term = '{_term.Id}'");
+                    foreach(Course c in courses)
+                    {
+                        var assessments = con.Query<Assessment>($"SELECT * FROM Assessments WHERE Course = '{c.Id}'");
+                        foreach(Assessment a in assessments)
+                        {
+                            con.Delete(a);
+                        }
+                        con.Delete(c);
+                    }
+                    con.Delete(_term);
+                    await Navigation.PopToRootAsync();
+                }
+                    
+            }
+        }
+
+        private async void btnEditTerm_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditTermPage(_term, _main));
+        }
     }
 }
